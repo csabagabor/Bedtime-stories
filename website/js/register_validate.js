@@ -1,3 +1,13 @@
+function DisableButton() {
+    $("#btn_Create").css('opacity', '0.5');
+    $('#btn_Create').attr("onClick", "return false");
+}
+
+function EnableButton() {
+    $("#btn_Create").css('opacity', '1');
+    $('#btn_Create').attr("onClick", "return true");
+}
+
 $(function () {
 
 
@@ -17,7 +27,7 @@ $(function () {
 
     var color_correct = "greenyellow";
     var color_incorrect = "red";
-	var color_original = "SkyBlue";
+	  var color_original = "SkyBlue";
 
 
     $(input_password)
@@ -91,15 +101,9 @@ $(function () {
         $(input_password).css("border-color", color_incorrect);
     }
 
-    function DisableButton() {
-        $("#btn_Create").css('opacity', '0.5');
-        $('#btn_Create').attr("onClick", "return false");
-    }
 
-    function EnableButton() {
-        $("#btn_Create").css('opacity', '1');
-        $('#btn_Create').attr("onClick", "return true");
-    }
+
+
 
     function HideTooltipUserName() {
         $(input_username)
@@ -129,14 +133,17 @@ $(function () {
         if ($(input_username).val() === "") {
             SetTextTooltipUsername("Username field is required!");
             $(input_username).tooltip('show');
+            DisableButton();
         }
         if ($(input_email).val() === "") {
             SetTextTooltipEmail("Email field is required!");
             $(input_email).tooltip('show');
+            DisableButton();
         }
         if ($(input_password).val() === "") {
             SetTextTooltipPassword("Password field is required!");
             $(input_password).tooltip('show');
+            DisableButton();
         }
     });
 

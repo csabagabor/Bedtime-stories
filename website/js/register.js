@@ -31,16 +31,26 @@ $('#registerForm').submit(function(e) {
     dataType: "json",
     contentType: "application/json",
     success: function(data) {
-      window.open('verify.html', '_self', 'resizable=yes')
+      //window.open('verify.html', '_self', 'resizable=yes')
+      resetInput();
+      DisableButton();
+      addSuccessMessage("Account created successfully!");
+      $("#serverMessage").append(`
+          <p style="color: black;">Please
+           <button id="btn_SignUp" type="button" e,
+            onclick="window.open('login.html', '_self', 'resizable=yes')"
+             class="btn btn-primary btn-sm">Log In</button> </p>`);
       console.log(data);
     },
     error: function(err) {
         try{
         addErrorMessage(err.responseJSON.message);
         resetInput();
+        DisableButton();
       }
       catch(e){
         addErrorMessage("Cannot send your request! Please try again!");
+        DisableButton();
       }
       console.log(err);
     }
