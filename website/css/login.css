@@ -1,0 +1,44 @@
+.tooltip {
+    margin-left: 100px;
+}
+
+.tooltip > .tooltip-inner {
+    white-space: nowrap;
+    max-width: none;
+    padding: .5em 1em .4em;
+    background-color: #f66;
+    border: 1px solid #f00;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 15px;
+}
+/* Tooltip on right */
+.tooltip.right > .tooltip-arrow {
+    border-right: 5px solid black;
+}
+
+.form-control {
+    border-width: 2px;
+    border-style: solid;
+    border-color: ActiveBorder;
+}
+
+.input-validation-error {
+    border: 2px solid #ff0000;
+}
+
+#btn_Create {
+    opacity: 0.5;
+}
+
+#btn_LogIn {
+    opacity: 0.5;
+}
+
+#simpleLabel {
+    color: #6BD425;
+}
+
+.table td {
+    text-align: center;
+}

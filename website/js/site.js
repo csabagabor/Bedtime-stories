@@ -1,7 +1,5 @@
-var domain = "https://lit-wildwood-83335.herokuapp.com";
+//var domain = "https://lit-wildwood-83335.herokuapp.com";
 //var domain = "http://localhost:8080";//for testing
-var apiTaleURL = domain+"/api/tale/";
-var apiRatingURL = domain+"/api/tale/rating/";
 
 
 var currentTaleDate;
@@ -46,7 +44,7 @@ function getTaleByDate(date){
      }
      $('#tale-title').text(data.title);
      $('#tale-description').text(data.description);
-     hideLoadingScreen();
+
   });
   //show user's Rating
   var rating = getOwnRatingByDate(date);
@@ -154,8 +152,22 @@ function appendItemsToArchiveList(){
   });
 }
 
-$(document).ready(function() {
 
+async function main(){
+
+  var user = await isLoggedIn();
+  //var isSignedIn = true;
+  if(user === null){
+    showLoadingScreenMessage("You are not logged in",`
+    <p style="color: black;">Please
+     <button id="btn_SignUp" type="button" e,
+      onclick="window.open('login.html', '_self', 'resizable=yes')"
+     class="btn btn-primary btn-sm">Log In</button>
+    `);
+  }
+  else{
+    $("#profileNav").html("Welcome "+user.username+" ");
+    $(".fadeMe").fadeOut();
     if(window.location.href.indexOf("top") > -1){
       //top.html
     }
@@ -163,6 +175,11 @@ $(document).ready(function() {
       //index.html
       getTaleByURL(window.location);
       appendItemsToArchiveList();
+      hideLoadingScreen();
     }
+  }
+}
 
+$(document).ready(function() {
+    main();
 });

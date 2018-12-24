@@ -1,8 +1,4 @@
-var domain = "https://lit-wildwood-83335.herokuapp.com";
-//var domain = "http://localhost:8080";//for testing
-var apiTaleURL = domain+"/api/tale/";
-var apiRatingURL = domain+"/api/tale/rating/";
-var apiTopTalesURL = domain+"/api/tale/top/";
+
 
 
 function getTaleRatingByDate(date){
@@ -48,7 +44,7 @@ function getTopTales(limit){
 
          }
        }
-       hideLoadingScreen();
+       //hideLoadingScreen();
   });
 }
 
@@ -57,4 +53,5 @@ function getTopTales(limit){
 $(document).ready(function() {
     getTopTales(25);
     //appendItemsToArchiveList();
+    hideLoadingScreen();
 });
