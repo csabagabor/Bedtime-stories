@@ -8,3 +8,15 @@ INSERT INTO role (id, description, name) VALUES (5, 'User role', 'USER');
 INSERT INTO user_roles (user_id, role_id) VALUES (1, 4);
 INSERT INTO user_roles (user_id, role_id) VALUES (2, 5);
 INSERT INTO user_roles (user_id, role_id) VALUES (3, 5);
+
+
+INSERT INTO author (id, name) VALUES (1, "Grimm");
+INSERT INTO author (id, name) VALUES (2, "Noname");
+
+
+INSERT INTO genre (id, type) VALUES (1, "fairytale");
+INSERT INTO genre (id, type) VALUES (2, "short");
+
+
+INSERT INTO tale (id, title, description, genre_id, author_id, date_added, rating, nr_rating)
+ VALUES (1, "short story","description", 1,1,"2018-01-05", 5.0, 100);

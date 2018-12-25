@@ -53,5 +53,5 @@ function getTopTales(limit){
 $(document).ready(function() {
     getTopTales(25);
     //appendItemsToArchiveList();
-    hideLoadingScreen();
+    //hideLoadingScreen();
 });
