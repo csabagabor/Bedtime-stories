@@ -1,13 +1,12 @@
-
-
+var registerURL = serverUrl + "/api/signup";
+var user = null;
 
 function resetInput() {
   $("#UserName").val("");
   $("#EmailAddress").val("");
-  $("#password").val("");
 }
 
-$('#registerForm').submit(function(e) {
+$('#profileForm').submit(function(e) {
   // get all the inputs into an array.
   var $inputs = $('#registerForm :input');
 
@@ -20,9 +19,12 @@ $('#registerForm').submit(function(e) {
 
   var registerData = {
     username: values["UserName"],
-    password: values["password"],
     email: values["EmailAddress"],
   };
+
+
+
+
   //send to server
   $.ajax({
     url: registerURL,
@@ -34,12 +36,7 @@ $('#registerForm').submit(function(e) {
       //window.open('verify.html', '_self', 'resizable=yes')
       resetInput();
       DisableButton();
-      addSuccessMessage("Account created successfully!");
-      $("#serverMessage").append(`
-          <p style="color: black;">Please
-           <button id="btn_SignUp" type="button" e,
-            onclick="window.open('login.html', '_self', 'resizable=yes')"
-             class="btn btn-primary btn-sm">Log In</button> </p>`);
+      addSuccessMessage("Information succesfully updated!");
       console.log(data);
     },
     error: function(err) {
@@ -60,12 +57,22 @@ $('#registerForm').submit(function(e) {
 });
 
 async function main(){
-  var isSignedIn = await isLoggedIn();
-  if(isSignedIn){
-    window.open('index.html', '_self', 'resizable=yes');
+  user = await isLoggedIn();
+  //var isSignedIn = true;
+  if(user === null){
+    showLoadingScreenMessage("You are not logged in",`
+    <p style="color: black;">Please
+     <button id="btn_SignUp" type="button" e,
+      onclick="window.open('login.html', '_self', 'resizable=yes')"
+     class="btn btn-primary btn-sm">Log In</button>
+    `);
   }
   else{
+    $("#EmailAddress").val(user.email);
+    $("#UserName").val(user.username);
+    $("#profileNav").html("Welcome "+user.username+" ");
     $(".fadeMe").fadeOut();
+    hideLoadingScreen();
   }
 }
 

@@ -1,4 +1,4 @@
-var loginURL = serverUrl + "/token/generate-token";
+
 
   function resetInput() {
     $("#UserName").val("");

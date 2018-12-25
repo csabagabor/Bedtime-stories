@@ -5,8 +5,10 @@ import com.bedtime.stories.exception.TokenExpirationException;
 import com.bedtime.stories.model.AuthToken;
 import com.bedtime.stories.model.LoginUser;
 import com.bedtime.stories.model.User;
+import com.bedtime.stories.model.UserDto;
 import com.bedtime.stories.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,6 +16,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 import static com.bedtime.stories.model.Constants.ACCESS_TOKEN_VALIDITY_SECONDS;
 import static com.bedtime.stories.model.Constants.ACCESS_TOKEN_VALIDITY_SECONDS_REMEMBER_ME;
@@ -58,6 +62,35 @@ public class AuthenticationController {
         User user = userService.findByUsername(userName);
         //return ResponseEntity.ok(user.getRoles().stream().map(Role::getName).collect(Collectors.toList()));
         return ResponseEntity.ok(user);
+    }
+
+    @RequestMapping(value = "/changeUser/{username}", method = RequestMethod.PUT)
+    public User updateUser(@PathVariable String username, @RequestHeader HttpHeaders httpHeaders, @RequestBody UserDto user) throws Exception {
+        String token = getTokenFromHeader(httpHeaders);
+        if (!jwtTokenUtil.getUsernameFromToken(token).equals(username))
+            throw new Exception("Bad credentials!");
+        User userReal = userService.findByUsername(username);
+        userReal.setUsername(user.getUsername());
+        userReal.setEmail(user.getEmail());
+        return userService.save(userReal);
+    }
+
+    @RequestMapping(value = "/changePassword/{username}", method = RequestMethod.PUT)
+    public User changePassword(@PathVariable String username, @RequestHeader HttpHeaders httpHeaders,@RequestBody Map<String, String> passwords) throws Exception {
+        String token = getTokenFromHeader(httpHeaders);
+        if (!jwtTokenUtil.getUsernameFromToken(token).equals(username))
+            throw new Exception("Bad credentials!");
+        String passwordOld = passwords.get("OldPassword");
+        String password = passwords.get("password");
+        return userService.changePassword(username, passwordOld, password);
+    }
+
+
+    private String getTokenFromHeader(HttpHeaders httpHeaders) {
+        Map<String, String> headerMap = httpHeaders.toSingleValueMap();
+        String token = headerMap.get("authorization");
+        token = token.replace("Bearer ", "");
+        return token;
     }
 
 }

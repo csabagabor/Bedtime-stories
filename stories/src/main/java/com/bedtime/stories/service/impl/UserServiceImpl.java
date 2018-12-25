@@ -91,4 +91,18 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         role.getUsers().add(newUser);
         return userRepository.save(newUser);
     }
+
+    @Override
+    public User changePassword(String username, String passwordOld, String password) throws Exception {
+        User user = userRepository.findByUsername(username);
+        if (!bcryptEncoder.matches(passwordOld, user.getPasswordHash()))
+            throw new Exception("Invalid credentials!");
+        user.setPasswordHash(bcryptEncoder.encode(password));
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User save(User user) {
+        return userRepository.save(user);
+    }
 }

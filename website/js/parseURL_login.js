@@ -10,7 +10,7 @@ $(function () {
         var position = 0;
         position = url.indexOf('user');
         if (position > 0) {
-            email = url.substring(position + 6);
+            email = url.substring(position + 5);
             $('#UserName').val(email);
         }
     }

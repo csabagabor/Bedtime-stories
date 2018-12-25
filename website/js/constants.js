@@ -5,6 +5,8 @@ var checkLoginURL = serverUrl + "/token/check-login";
 var apiTaleURL = serverUrl+"/api/tale/";
 var apiRatingURL = serverUrl+"/api/tale/rating/";
 var apiTopTalesURL = serverUrl+"/api/tale/top/";
+var registerURL = serverUrl + "/api/signup";
+var loginURL = serverUrl + "/token/generate-token";
 
 $.ajaxSetup({
     beforeSend: function(xhr) {
