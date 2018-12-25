@@ -10,8 +10,8 @@ function getTaleRatingByDate(date){
 }
 
 
-function getTopTales(limit){
-  $.ajax({
+async function getTopTales(limit){
+  await $.ajax({
       url: apiTopTalesURL + limit
   }).then(function(data) {
         for(let i=0;i<data.length ; i++){
@@ -48,10 +48,14 @@ function getTopTales(limit){
   });
 }
 
-
+async function main_top(){
+  await getTopTales(25);
+  //appendItemsToArchiveList();
+  hideLoadingScreen();
+}
 
 $(document).ready(function() {
-    getTopTales(25);
-    //appendItemsToArchiveList();
-    //hideLoadingScreen();
+    main_top();
+
+
 });

@@ -2,6 +2,7 @@ package com.bedtime.stories.controller;
 
 import com.bedtime.stories.model.Tale;
 import com.bedtime.stories.service.TaleService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -32,16 +34,19 @@ public class TaleController {
 
     @GetMapping(value = "/rating/{date}", produces = "application/json")
     public ObjectNode getRatingByDate(@PathVariable String date) {
-        Float ratingNode = taleService.getRatingByDateAdded(date);
+        Tale tale = taleService.getTaleByDate(date);
+        Float rating = tale.getRating();
+        Integer nrRating = tale.getNrRating();
         ObjectNode objectNode = mapper.createObjectNode();
-        objectNode.put("rating", ratingNode);
+        objectNode.put("rating", rating);
+        objectNode.put("nr_rating", nrRating);
         return objectNode;
     }
 
 
     @PutMapping(value = "/rating/{date}", produces = "application/json")
     public Tale updateRatingByDate(@PathVariable String date,
-                                     @RequestBody String body) throws Exception {
+                                   @RequestBody String body) throws Exception {
         JsonNode jsonNode = mapper.readTree(body);
         int rating = jsonNode.get("rating").intValue();
         int oldRating = jsonNode.get("oldRating").intValue();
@@ -50,19 +55,17 @@ public class TaleController {
 
     @PostMapping(value = "/rating/{date}", produces = "application/json")
     public Tale addRatingByDate(@PathVariable String date,
-                                  @RequestBody String body) throws Exception {
+                                @RequestBody String body) throws Exception {
         JsonNode jsonNode = mapper.readTree(body);
         int rating = jsonNode.get("rating").intValue();
         return taleService.addRatingByDate(date, rating);
     }
 
-//    @GetMapping(value = "/top/{limit}", produces = "application/json")
-//    public String getTopTales(@PathVariable int limit) throws JsonProcessingException {
-//
-//        List<Tale> list = taleService.getTopTales(limit);
-//        String json = mapper.writeValueAsString(JsonView.with(list).onClass(Tale.class, match().include("dateAdded")));
-//        return json;
-//    }
+    @GetMapping(value = "/top/{limit}", produces = "application/json")
+    public List<Tale> getTopTales(@PathVariable int limit) throws JsonProcessingException {
+        //limit is 25 currently, can be changed later if there is need
+        return taleService.getTopTales();
+    }
 
 
 }

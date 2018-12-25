@@ -6,6 +6,15 @@ var apiTaleURL = serverUrl+"/api/tale/";
 var apiRatingURL = serverUrl+"/api/tale/rating/";
 var apiTopTalesURL = serverUrl+"/api/tale/top/";
 
+$.ajaxSetup({
+    beforeSend: function(xhr) {
+        if(localStorage.getItem("token"))
+          xhr.setRequestHeader('Authorization', 'Bearer '+localStorage.getItem("token"));
+        else if(sessionStorage.getItem("token"))
+          xhr.setRequestHeader('Authorization', 'Bearer '+sessionStorage.getItem("token"));
+    }
+});
+
 
 function logout(){
   sessionStorage.removeItem('token');

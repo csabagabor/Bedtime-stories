@@ -6,6 +6,8 @@ import com.bedtime.stories.service.TaleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TaleServiceImpl implements TaleService {
 
@@ -18,10 +20,6 @@ public class TaleServiceImpl implements TaleService {
         return taleRepository.getTaleByDateAdded(date);
     }
 
-    @Override
-    public Float getRatingByDateAdded(String date) {
-        return taleRepository.getRatingByDateAdded(date);
-    }
 
     @Override
     public Tale addRatingByDate(String date, int rating) throws Exception {
@@ -52,10 +50,10 @@ public class TaleServiceImpl implements TaleService {
         return taleRepository.save(tale);
     }
 
-//    @Override
-//    public List<Tale> getTopTales(int limit) {
-//        return taleRepository.getTopTales(limit);
-//    }
+    @Override
+    public List<Tale> getTopTales() {
+        return taleRepository.findTop25ByOrderByRatingDesc();
+    }
 
 
     private float calculateRating(float overallRating, int nrRating, int rating) {

@@ -96,16 +96,9 @@ function setOwnRatingByDate(date, rating){
    dataType: "json",
    contentType: "application/json",
    success: function(data){
-        if(data.returnNumber >=0){//success
+        //success
           //change average rating shown
-          showTaleRatingByDate(date);
-        }
-        if(data.returnNumber == -4){//rating does not exist, post it
-          //first delete the rating
-          localStorage.removeItem("rating"+date);
-          //the new function call will send a POST reqesut instead of PUT
-          setOwnRatingByDate(date, rating);
-        }
+      showTaleRatingByDate(date);
     },
    error: function(err) {
       console.log(err);
@@ -140,7 +133,7 @@ function formatDateToString(date){
 }
 
 function appendItemsToArchiveList(){
-  var dates = getDates(new Date(2018,08,16), Date.now());
+  var dates = getDates(new Date(2018,11,20), Date.now());
   var archiveListElem = document.getElementById("archive-list");
   dates.forEach(function(date) {
     var prettyDate = formatDateToString(date);
