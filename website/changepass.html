@@ -75,31 +75,26 @@
           <form id="profileForm" method="POST" role="form" class="form-horizontal">
 
             <div class="form-group">
-              <label class="col-md-3 control-label">Old Password:</label>
-              <div class="col-md-8">
-                <input id="OldPassword" class="form-control" type="password" value="">
-              </div>
+              <label for="OldPassword"><span>*</span> OldPassword</label>
+              <input  type="password" class="form-control" name="OldPassword" id="OldPassword">
             </div>
             <div class="form-group">
-              <label class="col-md-3 control-label">Password:</label>
-              <div class="col-md-8">
-                <input id="Password1" class="form-control" type="password" value="">
-              </div>
+              <label for="Password1"><span>*</span> New Password</label>
+              <input   type="password" class="form-control" name="Password1" id="Password1">
             </div>
             <div class="form-group">
-              <label class="col-md-3 control-label">Confirm password:</label>
-              <div class="col-md-8">
-                <input id="Password2" class="form-control" type="password" value="">
-              </div>
+              <label for="Password2"><span>*</span> New Password again</label>
+              <input type="password" class="form-control" name="Password2" id="Password2">
             </div>
+
             <div class="form-group">
-              <label class="col-md-3 control-label"></label>
               <div class="col-md-8">
-                <input onclick="return false" type="submit" class="btn btn-primary" value="Save Changes">
+                <input type="submit" class="btn btn-primary btn-lg" value="Save Changes">
                 <span></span>
                 <input type="reset" onclick="cancel()" class="btn btn-default" value="Cancel">
               </div>
             </div>
+
           </form>
         </div>
     </div>

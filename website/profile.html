@@ -74,26 +74,20 @@
 
           <form id="profileForm" method="POST" role="form" class="form-horizontal">
             <div class="form-group">
-              <label class="col-lg-3 control-label">Email:</label>
-              <div class="col-lg-8">
-                <input id="EmailAddress" class="form-control" type="text" value="new email">
-              </div>
+              <label for="EmailAddress"><span>*</span> EmailAddress</label>
+              <input type="text" class="form-control" name="EmailAddress" id="EmailAddress">
             </div>
             <div class="form-group">
-              <label class="col-lg-3 control-label">Username:</label>
-              <div class="col-lg-8">
-                <input id="UserName" class="form-control" type="text" value="">
-              </div>
+              <label for="UserName"><span>*</span> User Name</label>
+              <input type="text" class="form-control" name="UserName" id="UserName">
             </div>
             <div class="form-group">
-              <div class="col-lg-8">
-                <input hidden id="Password" class="form-control" type="password" value="">
-              </div>
+              <input hidden type="text" class="form-control" name="Password" id="Password">
             </div>
             <div class="form-group">
               <label class="col-md-3 control-label"></label>
               <div class="col-md-8">
-                <input onclick="return false" type="submit" class="btn btn-primary" value="Save Changes">
+                <input type="submit" class="btn btn-primary" value="Save Changes">
                 <span></span>
                 <input type="reset" onclick="cancel()" class="btn btn-default" value="Cancel">
               </div>

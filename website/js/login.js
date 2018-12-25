@@ -25,6 +25,9 @@
       password: values["password"],
       rememberMe: values["RememberMe"],
     };
+    //delete token from storage if present, else cannot login
+    sessionStorage.removeItem('token');
+    localStorage.removeItem('token');
     //send to server
     $.ajax({
       url: loginURL,

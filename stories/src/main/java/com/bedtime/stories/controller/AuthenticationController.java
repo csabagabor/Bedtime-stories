@@ -76,13 +76,13 @@ public class AuthenticationController {
     }
 
     @RequestMapping(value = "/changePassword/{username}", method = RequestMethod.PUT)
-    public User changePassword(@PathVariable String username, @RequestHeader HttpHeaders httpHeaders,@RequestBody Map<String, String> passwords) throws Exception {
+    public User changePassword(@PathVariable String username, @RequestHeader HttpHeaders httpHeaders, @RequestBody Map<String, String> passwords) throws Exception {
         String token = getTokenFromHeader(httpHeaders);
         if (!jwtTokenUtil.getUsernameFromToken(token).equals(username))
             throw new Exception("Bad credentials!");
         String passwordOld = passwords.get("OldPassword");
         String password = passwords.get("password");
-        return userService.changePassword(username, passwordOld, password);
+        return  userService.changePassword(username, passwordOld, password);
     }
 
 
@@ -92,5 +92,7 @@ public class AuthenticationController {
         token = token.replace("Bearer ", "");
         return token;
     }
+
+
 
 }

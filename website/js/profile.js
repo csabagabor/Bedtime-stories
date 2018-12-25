@@ -1,4 +1,3 @@
-var registerURL = serverUrl + "/api/signup";
 var user = null;
 
 function resetInput() {
@@ -6,9 +5,11 @@ function resetInput() {
   $("#EmailAddress").val("");
 }
 
+
+
 $('#profileForm').submit(function(e) {
   // get all the inputs into an array.
-  var $inputs = $('#registerForm :input');
+  var $inputs = $('#profileForm :input');
 
   // not sure if you wanted this, but I thought I'd add it.
   // get an associative array of just the values.
@@ -26,35 +27,43 @@ $('#profileForm').submit(function(e) {
 
 
   //send to server
-  $.ajax({
-    url: registerURL,
-    type: "POST",
+  sendData(registerData);
+
+  e.preventDefault();
+});
+
+async function sendData(registerData){
+  var success = false;
+
+  await $.ajax({
+    url: changeUserURL+"/"+user.username,
+    type: "PUT",
     data: JSON.stringify(registerData),
     dataType: "json",
     contentType: "application/json",
     success: function(data) {
       //window.open('verify.html', '_self', 'resizable=yes')
-      resetInput();
-      DisableButton();
-      addSuccessMessage("Information succesfully updated!");
+      addSuccessMessage("Information succesfully updated!<br> You will be logged out shortly");
       console.log(data);
+      //need to change token if user info was updated so better log out the user
+      success = true;
     },
     error: function(err) {
         try{
         addErrorMessage(err.responseJSON.message);
-        resetInput();
-        DisableButton();
       }
       catch(e){
         addErrorMessage("Cannot send your request! Please try again!");
-        DisableButton();
       }
       console.log(err);
     }
   });
 
-  e.preventDefault();
-});
+  if(success){
+    await sleep(2000);
+    logout();
+  }
+}
 
 async function main(){
   user = await isLoggedIn();

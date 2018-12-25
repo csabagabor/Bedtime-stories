@@ -7,6 +7,12 @@ var apiRatingURL = serverUrl+"/api/tale/rating/";
 var apiTopTalesURL = serverUrl+"/api/tale/top/";
 var registerURL = serverUrl + "/api/signup";
 var loginURL = serverUrl + "/token/generate-token";
+var changePassURL = serverUrl + "/token/changePassword";
+var changeUserURL = serverUrl + "/token/changeUser";
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 $.ajaxSetup({
     beforeSend: function(xhr) {

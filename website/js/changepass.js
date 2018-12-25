@@ -1,4 +1,4 @@
-var registerURL = serverUrl + "/api/signup";
+var user = null;
 
 
 function resetInput() {
@@ -9,7 +9,7 @@ function resetInput() {
 
 $('#profileForm').submit(function(e) {
   // get all the inputs into an array.
-  var $inputs = $('#registerForm :input');
+  var $inputs = $('#profileForm :input');
 
   // not sure if you wanted this, but I thought I'd add it.
   // get an associative array of just the values.
@@ -18,49 +18,57 @@ $('#profileForm').submit(function(e) {
     values[this.name] = $(this).val();
   });
 
-  var registerData = {
-    passwordOld: values["OldPassword"],
-    password1: values["Password1"],
-    password2: values["Password2"],
-  };
+  if(values["Password1"] !== values["Password2"]){
+    addErrorMessage("Passwords do not match");
+  }
+  else{
+    var registerData = {
+      OldPassword: values["OldPassword"],
+      password: values["Password1"],
+    };
+    sendData(registerData);
+  }
+
+
+  e.preventDefault();
+});
+
+
+async function sendData(registerData){
+  var success = false;
   //send to server
-  $.ajax({
-    url: registerURL,
-    type: "POST",
+  await $.ajax({
+    url: changePassURL+"/"+user.username,
+    type: "PUT",
     data: JSON.stringify(registerData),
     dataType: "json",
     contentType: "application/json",
     success: function(data) {
-      //window.open('verify.html', '_self', 'resizable=yes')
-      resetInput();
-      DisableButton();
-      addSuccessMessage("Account created successfully!");
-      $("#serverMessage").append(`
-          <p style="color: black;">Please
-           <button id="btn_SignUp" type="button" e,
-            onclick="window.open('login.html', '_self', 'resizable=yes')"
-             class="btn btn-primary btn-sm">Log In</button> </p>`);
+      addSuccessMessage("Information succesfully updated!<br> You will be logged out shortly");
       console.log(data);
+      //need to change token if user info was updated so better log out the user
+      success = true;
     },
     error: function(err) {
         try{
         addErrorMessage(err.responseJSON.message);
-        resetInput();
-        DisableButton();
       }
       catch(e){
         addErrorMessage("Cannot send your request! Please try again!");
-        DisableButton();
       }
       console.log(err);
     }
   });
 
-  e.preventDefault();
-});
+  if(success){
+    await sleep(2000);
+    logout();
+  }
+}
+
 
 async function main(){
-  var user = await isLoggedIn();
+  user = await isLoggedIn();
   //var isSignedIn = true;
   if(user === null){
     showLoadingScreenMessage("You are not logged in",`
@@ -71,8 +79,6 @@ async function main(){
     `);
   }
   else{
-    $("#EmailAddress").val(user.email);
-    $("#UserName").val(user.username);
     $("#profileNav").html("Welcome "+user.username+" ");
     $(".fadeMe").fadeOut();
     hideLoadingScreen();
