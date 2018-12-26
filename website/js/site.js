@@ -195,6 +195,33 @@ function addToFavorite(){
   }
 }
 
+function editTale(){
+  window.open('edit.html?date='+currentTaleDate, '_self', 'resizable=yes');
+}
+
+function deleteTale(){
+  $.ajax({
+   url: deleteTaleURL+currentTaleDate,
+   type: 'DELETE',
+   data : "",
+   dataType: "json",
+   contentType: "application/json",
+   success: function(data){
+        //success
+        addSuccessMessage("Tale successfully deleted!");
+    },
+   error: function(err) {
+     try {
+       addErrorMessage(err.responseJSON.message);
+       resetInput();
+     } catch (err) {
+       addErrorMessage("Cannot send your request! Please try again!");
+     }
+     console.log(err);
+    }
+  });
+}
+
 async function main(){
 
   var user = await isLoggedIn();
@@ -218,6 +245,14 @@ async function main(){
       getTaleByURL(window.location);
       appendItemsToArchiveList();
       hideLoadingScreen();
+      //check if user is admin
+      if(isAdmin(user)){
+        $("#edit-delete").show();
+      }
+      else {
+        $("#edit-delete").hide();//not neccessary
+
+      }
     }
   }
 }

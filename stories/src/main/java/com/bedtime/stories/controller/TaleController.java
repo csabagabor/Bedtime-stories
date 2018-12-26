@@ -74,4 +74,16 @@ public class TaleController {
         return taleService.saveTale(taleDto);
     }
 
+    @PutMapping(value = "/tales/{date}", produces = "application/json")
+    public Tale modifyTale(@PathVariable String date, @Valid @RequestBody TaleDto taleDto) throws Exception {
+        return taleService.updateTale(date, taleDto);
+    }
+
+    @DeleteMapping(value = "/tales/{date}", produces = "application/json")
+    public ObjectNode deleteTale(@PathVariable String date) throws Exception {
+        taleService.deleteTaleByDate(date);
+        ObjectNode objectNode = mapper.createObjectNode();
+        objectNode.put("success", "true");
+        return objectNode;
+    }
 }

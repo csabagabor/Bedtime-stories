@@ -2,8 +2,6 @@ var serverUrl = "http://localhost:8080";
 var apiTaleURL = serverUrl+"/api/tale/";
 var apiRatingURL = serverUrl+"/api/tale/rating/";
 var checkLoginURL = serverUrl + "/token/check-login";
-var apiTaleURL = serverUrl+"/api/tale/";
-var apiRatingURL = serverUrl+"/api/tale/rating/";
 var apiTopTalesURL = serverUrl+"/api/tale/top/";
 var registerURL = serverUrl + "/api/signup";
 var loginURL = serverUrl + "/token/generate-token";
@@ -14,7 +12,8 @@ var getGenres = serverUrl + "/api/genre/";
 var getAuthors = serverUrl + "/api/author/";
 var favoriteURL = serverUrl + "/api/favorite/";
 var allFavorites = serverUrl + "/api/favorite";
-
+var deleteTaleURL = serverUrl + "/api/tale/tales/";
+var editTaleURL = serverUrl + "/api/tale/tales/";
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -34,6 +33,15 @@ function logout(){
   sessionStorage.removeItem('token');
   localStorage.removeItem('token');
   window.open('login.html', '_self', 'resizable=yes');
+}
+
+function isAdmin(user){
+  var res = false;
+  user.roles.forEach(function(item) {
+    if(item.name=="ADMIN")
+      res = true;
+    });
+  return res;
 }
 
 async function isLoggedIn(){

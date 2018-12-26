@@ -16,4 +16,8 @@ public interface TaleService {
     List<Tale> getTopTales();
 
     Tale saveTale(TaleDto taleDto);
+
+    Tale updateTale(String date, TaleDto taleDto);
+
+    void deleteTaleByDate(String date);
 }

@@ -87,4 +87,30 @@ public class TaleServiceImpl implements TaleService {
         author.getTales().add(tale);
         return taleRepository.save(tale);
     }
+
+    @Override
+    public Tale updateTale(String date, TaleDto taleDto) {
+        Tale tale = taleRepository.getTaleByDateAdded(date);
+
+        tale.getAuthor().getTales().remove(tale);
+        tale.getGenre().getTales().remove(tale);
+
+        Author author = authorRepository.findByName(taleDto.getAuthor());
+        Genre genre = genreRepository.findByType(taleDto.getGenre());
+        tale.setAuthor(author);
+        tale.setGenre(genre);
+        author.getTales().add(tale);
+        genre.getTales().add(tale);
+
+        tale.setTitle(taleDto.getTitle());
+        tale.setDescription(taleDto.getDescription());
+
+        return taleRepository.save(tale);
+    }
+
+    @Override
+    public void deleteTaleByDate(String date) {
+        Tale tale = taleRepository.getTaleByDateAdded(date);
+        taleRepository.delete(tale);
+    }
 }
