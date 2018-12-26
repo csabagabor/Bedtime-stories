@@ -40,6 +40,17 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
 
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "user_tales",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "tale_id") })
+    @JsonIgnoreProperties("users")
+    private Set<Tale> tales = new HashSet<>();
+
     public User() {
 
     }
@@ -90,6 +101,13 @@ public class User {
         this.roles = roles;
     }
 
+    public Set<Tale> getTales() {
+        return tales;
+    }
+
+    public void setTales(Set<Tale> tales) {
+        this.tales = tales;
+    }
 
     @Override
     public boolean equals(Object o) {

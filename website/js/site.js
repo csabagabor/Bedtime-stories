@@ -50,6 +50,7 @@ function getTaleByDate(date){
   var rating = getOwnRatingByDate(date);
   appendRating(rating);
   showTaleRatingByDate(date);
+  appendFavorite(date);
 }
 
 
@@ -145,6 +146,52 @@ function appendItemsToArchiveList(){
   });
 }
 
+function appendFavorite(date){
+  $.get(allFavorites, function(data, status){
+    if(data.includes(date)){
+      $("#favorite").attr("src","http://icons.iconarchive.com/icons/custom-icon-design/flatastic-3/32/favorites-add-icon.png");
+    }
+  });
+}
+
+function addToFavorite(){
+  if($("#favorite").attr("src") != "http://icons.iconarchive.com/icons/custom-icon-design/flatastic-3/32/favorites-add-icon.png"){
+    //add as favorite
+    $.ajax({
+     url: favoriteURL+currentTaleDate,
+     type: 'POST',
+     data : "",
+     dataType: "json",
+     contentType: "application/json",
+     success: function(data){
+          //success
+          //change average rating shown
+            $("#favorite").attr("src","http://icons.iconarchive.com/icons/custom-icon-design/flatastic-3/32/favorites-add-icon.png");
+      },
+     error: function(err) {
+        console.log(err);
+      }
+    });
+  }
+  else{
+    //remove from favorite
+    $.ajax({
+     url: favoriteURL+currentTaleDate,
+     type: 'DELETE',
+     data : "",
+     dataType: "json",
+     contentType: "application/json",
+     success: function(data){
+          //success
+          //change average rating shown
+            $("#favorite").attr("src","http://icons.iconarchive.com/icons/custom-icon-design/flatastic-3/32/favorites-remove-icon.png");
+      },
+     error: function(err) {
+        console.log(err);
+      }
+    });
+  }
+}
 
 async function main(){
 

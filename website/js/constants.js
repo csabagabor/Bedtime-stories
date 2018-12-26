@@ -12,6 +12,9 @@ var changeUserURL = serverUrl + "/token/changeUser";
 var postTale = serverUrl + "/api/tale/tales";
 var getGenres = serverUrl + "/api/genre/";
 var getAuthors = serverUrl + "/api/author/";
+var favoriteURL = serverUrl + "/api/favorite/";
+var allFavorites = serverUrl + "/api/favorite";
+
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));

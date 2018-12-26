@@ -1,9 +1,12 @@
 package com.bedtime.stories.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 
 /*
@@ -61,6 +64,16 @@ public class Tale {
 
 
     private String dateAdded;
+
+
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "tales")
+    @JsonIgnoreProperties("tales")
+    private Set<User> users = new HashSet<>();
 
     public Tale() {
 
@@ -139,6 +152,15 @@ public class Tale {
 
     public void setDateAdded(String dateAdded) {
         this.dateAdded = dateAdded;
+    }
+
+    @JsonIgnore
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
     @Override

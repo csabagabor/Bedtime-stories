@@ -21,4 +21,10 @@ public interface UserService {
     User findById(Long id);
 
     User changePassword(String username, String passwordOld, String password) throws Exception;
+
+    User addFavoriteTale(String username, String dateAdded);
+
+    List<String> getFavoritesDates(String username);
+
+    User removeFavoriteTale(String username, String date);
 }

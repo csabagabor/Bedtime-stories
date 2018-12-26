@@ -2,9 +2,11 @@ package com.bedtime.stories.service.impl;
 
 import com.bedtime.stories.exception.DuplicateEntityException;
 import com.bedtime.stories.model.Role;
+import com.bedtime.stories.model.Tale;
 import com.bedtime.stories.model.User;
 import com.bedtime.stories.model.UserDto;
 import com.bedtime.stories.repository.RoleRepository;
+import com.bedtime.stories.repository.TaleRepository;
 import com.bedtime.stories.repository.UserRepository;
 import com.bedtime.stories.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service(value = "userService")
@@ -29,6 +32,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private TaleRepository taleRepository;
 
     @Autowired
     private BCryptPasswordEncoder bcryptEncoder;
@@ -103,6 +109,30 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User addFavoriteTale(String username, String dateAdded) {
+        User user = userRepository.findByUsername(username);
+        Tale tale = taleRepository.getTaleByDateAdded(dateAdded);
+        user.getTales().add(tale);
+        tale.getUsers().add(user);
+        return userRepository.save(user);
+    }
+
+    @Override
+    public List<String> getFavoritesDates(String username) {
+        User user = userRepository.findByUsername(username);
+        return user.getTales().stream().map(Tale::getDateAdded).collect(Collectors.toList());
+    }
+
+    @Override
+    public User removeFavoriteTale(String username, String date) {
+        User user = userRepository.findByUsername(username);
+        Tale tale = taleRepository.getTaleByDateAdded(date);
+        user.getTales().remove(tale);
+        tale.getUsers().remove(user);
         return userRepository.save(user);
     }
 }
