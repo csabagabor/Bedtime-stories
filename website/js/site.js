@@ -42,6 +42,8 @@ function getTaleByDate(date){
      if(formatDateToString(new Date()) !== date){
        $('#story-big-title').text("Tale: "+date);
      }
+     $('#tale-genre').text("Genre: "+data.genre.type);
+     $('#tale-author').text("Author: "+data.author.name);
      $('#tale-title').text(data.title);
      $('#tale-description').text(data.description);
 
