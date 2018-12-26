@@ -8,11 +8,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.monitorjbl.json.JsonViewModule;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -68,17 +70,34 @@ public class TaleController {
         return taleService.getTopTales();
     }
 
+    @GetMapping(value = "/posted", produces = "application/json")
+    public List<Tale> getPostedTales() {
+        return taleService.getPostedTales();
+    }
+
+    @GetMapping(value = "/dates", produces = "application/json")
+    public List<String> getAllAvaialbleDates() {
+        return taleService.getAllAvailableDates();
+    }
+
+    @GetMapping(value = "/dates/full", produces = "application/json")
+    public List<String> getAllFullDates() {
+        return taleService.getAllFullDates();
+    }
+
 
     @PostMapping(value = "/tales", produces = "application/json")
     public Tale addTale(@Valid @RequestBody TaleDto taleDto) throws Exception {
         return taleService.saveTale(taleDto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/tales/{date}", produces = "application/json")
     public Tale modifyTale(@PathVariable String date, @Valid @RequestBody TaleDto taleDto) throws Exception {
         return taleService.updateTale(date, taleDto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/tales/{date}", produces = "application/json")
     public ObjectNode deleteTale(@PathVariable String date) throws Exception {
         taleService.deleteTaleByDate(date);
@@ -86,4 +105,21 @@ public class TaleController {
         objectNode.put("success", "true");
         return objectNode;
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping(value = "/tales/id/{id}", produces = "application/json")
+    public ObjectNode deleteTaleById(@PathVariable Long id) throws Exception {
+        taleService.deleteTaleById(id);
+        ObjectNode objectNode = mapper.createObjectNode();
+        objectNode.put("success", "true");
+        return objectNode;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(value = "/tales/id/{id}", produces = "application/json")
+    public Tale updateTaleById(@PathVariable Long id, @RequestBody Map<String, String> date) throws Exception {
+        String dateAdded = date.get("date");
+        return taleService.updateTaleById(id,dateAdded );
+    }
+
 }

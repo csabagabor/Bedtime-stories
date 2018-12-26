@@ -11,6 +11,7 @@ import java.util.List;
  */
 public interface TaleRepository extends CrudRepository<Tale, Long> {
     Tale getTaleByDateAdded(String dateAdded);
-
+    Tale getTaleById(Long id);
+    List<Tale> findTalesByDateAdded(String dateAdded);
     List<Tale> findTop25ByOrderByRatingDesc();
 }

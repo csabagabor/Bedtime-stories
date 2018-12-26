@@ -20,4 +20,13 @@ public interface TaleService {
     Tale updateTale(String date, TaleDto taleDto);
 
     void deleteTaleByDate(String date);
+
+    List<Tale> getPostedTales();
+
+    void deleteTaleById(Long id);
+
+    Tale updateTaleById(Long id, String date);
+
+    List<String> getAllAvailableDates();
+    List<String> getAllFullDates();
 }

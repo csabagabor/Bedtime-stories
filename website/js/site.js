@@ -1,6 +1,3 @@
-//var domain = "https://lit-wildwood-83335.herokuapp.com";
-//var domain = "http://localhost:8080";//for testing
-
 
 var currentTaleDate;
 
@@ -136,15 +133,15 @@ function formatDateToString(date){
 }
 
 function appendItemsToArchiveList(){
-  var dates = getDates(new Date(2018,11,20), Date.now());
   var archiveListElem = document.getElementById("archive-list");
-  dates.forEach(function(date) {
-    var prettyDate = formatDateToString(date);
-    var listItem = document.createElement("a");
-    listItem.appendChild(document.createTextNode(prettyDate));
-    listItem.href = "javascript:showTaleByDate('"+prettyDate+"');";
-    listItem.className = "dropdown-item";
-    archiveListElem.appendChild(listItem);
+  $.get(fullDatesUrl, function(data, status){
+    data.forEach(function(prettyDate){
+      var listItem = document.createElement("a");
+      listItem.appendChild(document.createTextNode(prettyDate));
+      listItem.href = "javascript:showTaleByDate('"+prettyDate+"');";
+      listItem.className = "dropdown-item";
+      archiveListElem.appendChild(listItem);
+    });
   });
 }
 
@@ -248,10 +245,11 @@ async function main(){
       //check if user is admin
       if(isAdmin(user)){
         $("#edit-delete").show();
+        $("#reviewBtn").show();
       }
       else {
         $("#edit-delete").hide();//not neccessary
-
+        $("#reviewBtn").hide();//not neccessary
       }
     }
   }

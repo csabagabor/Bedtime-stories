@@ -14,6 +14,12 @@ var favoriteURL = serverUrl + "/api/favorite/";
 var allFavorites = serverUrl + "/api/favorite";
 var deleteTaleURL = serverUrl + "/api/tale/tales/";
 var editTaleURL = serverUrl + "/api/tale/tales/";
+var postedTalesURL = serverUrl + "/api/tale/posted";
+var deleteTaleByIdURL = serverUrl + "/api/tale/tales/id/";
+var updateTaleByIdURL = serverUrl + "/api/tale/tales/id/";
+var fullDatesUrl = serverUrl + "/api/tale/dates/full";
+var availableDatesUrl = serverUrl + "/api/tale/dates";
+
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));

@@ -24,23 +24,9 @@ async function getTopTales(limit){
                "<p class='card-text'>" +  data[i].description.substring(0, 40) + '...' + '</p>' +
                '<h5>Date added: '+ data[i].dateAdded +  '</h5>' +
                '<p id="rating-date-' + data[i].dateAdded + '"></p>' +
-               '<a href="main.html" id="tale-date-' + data[i].dateAdded +'" class="li-modal btn btn-info">See Full description</a>' +
+               '<a href="./index.html?date=' +data[i].dateAdded +  '"id="tale-date-' + data[i].dateAdded +'" class="li-modal btn btn-info">See Full description</a>' +
              '</div></div>');
             //append rating when available
-            getTaleRatingByDate(data[i].dateAdded);
-
-            $('.li-modal').on('click', function(e){
-                  e.preventDefault();
-                  var id = $(this).attr('id');
-                  var date = id.replace("tale-date-","");
-
-                  $('#mainModal').modal('show').find('.modal-content').load($(this).attr('href'),function(data){
-                    //append tale and new title
-                    $('#story-big-title').text("Tale: "+date);
-                    getTaleByDate(date);
-                });
-
-            });
 
          }
        }
@@ -54,8 +40,27 @@ async function main_top(){
   hideLoadingScreen();
 }
 
+async function main(){
+
+  var user = await isLoggedIn();
+  //var isSignedIn = true;
+  if(user === null){
+    showLoadingScreenMessage("You are not logged in",`
+    <p style="color: black;">Please
+     <button id="btn_SignUp" type="button" e,
+      onclick="window.open('login.html', '_self', 'resizable=yes')"
+     class="btn btn-primary btn-sm">Log In</button>
+    `);
+  }
+  else{
+    $("#profileNav").html("Welcome "+user.username+" ");
+    $(".fadeMe").fadeOut();
+    main_top()
+    hideLoadingScreen();
+
+  }
+}
+
 $(document).ready(function() {
-    main_top();
-
-
+    main();
 });

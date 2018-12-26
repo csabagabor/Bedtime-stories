@@ -11,7 +11,10 @@ import com.bedtime.stories.service.TaleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaleServiceImpl implements TaleService {
@@ -112,5 +115,43 @@ public class TaleServiceImpl implements TaleService {
     public void deleteTaleByDate(String date) {
         Tale tale = taleRepository.getTaleByDateAdded(date);
         taleRepository.delete(tale);
+    }
+
+    @Override
+    public List<Tale> getPostedTales() {
+        return taleRepository.findTalesByDateAdded("");
+    }
+
+    @Override
+    public void deleteTaleById(Long id) {
+        Tale tale = taleRepository.getTaleById(id);
+        taleRepository.delete(tale);
+    }
+
+    @Override
+    public Tale updateTaleById(Long id, String date) {
+        Tale tale = taleRepository.getTaleById(id);
+        tale.setDateAdded(date);
+        return taleRepository.save(tale);
+    }
+
+    @Override
+    public List<String> getAllAvailableDates() {
+        List<String> fillDates = getAllFullDates();
+        List<String> availableDates = new ArrayList<>();
+
+        for (LocalDate date = LocalDate.of(2018, 11, 10);
+             date.isBefore(LocalDate.of(2019, 1, 29)); date = date.plusDays(1)) {
+            if (!fillDates.contains(date.toString())) {
+                availableDates.add(date.toString());
+            }
+        }
+        return availableDates;
+    }
+
+    @Override
+    public List<String> getAllFullDates() {
+        List<Tale> tales = (List<Tale>) taleRepository.findAll();
+        return tales.stream().map(Tale::getDateAdded).collect(Collectors.toList());
     }
 }
