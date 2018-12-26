@@ -1,5 +1,6 @@
 package com.bedtime.stories.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ public class Genre {
 
     @Column
     private String type;
+
 
     @JsonIgnoreProperties("genre")
     @OneToMany(mappedBy="genre")
@@ -44,6 +46,7 @@ public class Genre {
         this.type = type;
     }
 
+    @JsonIgnore
     public Set<Tale> getTales() {
         return tales;
     }
@@ -57,7 +60,6 @@ public class Genre {
         return "Genre{" +
                 "id=" + id +
                 ", type='" + type + '\'' +
-                ", tales=" + tales +
                 '}';
     }
 }

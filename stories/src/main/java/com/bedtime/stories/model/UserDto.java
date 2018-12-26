@@ -1,9 +1,21 @@
 package com.bedtime.stories.model;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
+import javax.validation.constraints.NotEmpty;
+
 public class UserDto {
 
+    @NotEmpty
+    @SafeHtml
     private String username;
+
+    @NotEmpty
+    @SafeHtml
     private String email;
+
+    @NotEmpty
+    @SafeHtml
     private String password;
 
 

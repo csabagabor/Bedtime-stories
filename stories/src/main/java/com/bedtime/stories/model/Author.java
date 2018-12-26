@@ -1,5 +1,6 @@
 package com.bedtime.stories.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -44,6 +45,7 @@ public class Author {
         this.name = name;
     }
 
+    @JsonIgnore
     public Set<Tale> getTales() {
         return tales;
     }
@@ -57,7 +59,6 @@ public class Author {
         return "Author{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", tales=" + tales +
                 '}';
     }
 }

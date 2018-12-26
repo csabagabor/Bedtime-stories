@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -34,7 +35,7 @@ public class UserController {
 
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public User saveUser(@RequestBody UserDto user) {
+    public User saveUser(@Valid @RequestBody UserDto user) {
         User userResult = userService.save(user);
         return userResult;
     }

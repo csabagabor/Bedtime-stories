@@ -1,6 +1,11 @@
 package com.bedtime.stories.service.impl;
 
+import com.bedtime.stories.model.Author;
+import com.bedtime.stories.model.Genre;
 import com.bedtime.stories.model.Tale;
+import com.bedtime.stories.model.TaleDto;
+import com.bedtime.stories.repository.AuthorRepository;
+import com.bedtime.stories.repository.GenreRepository;
 import com.bedtime.stories.repository.TaleRepository;
 import com.bedtime.stories.service.TaleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +19,12 @@ public class TaleServiceImpl implements TaleService {
 
     @Autowired
     private TaleRepository taleRepository;
+
+    @Autowired
+    private AuthorRepository authorRepository;
+
+    @Autowired
+    private GenreRepository genreRepository;
 
     @Override
     public Tale getTaleByDate(String date) {
@@ -64,5 +75,16 @@ public class TaleServiceImpl implements TaleService {
     private float calculateRating(float overallRating, int nrRating, int rating, int oldRating) {
         float newRating = (overallRating * nrRating - oldRating + rating) / nrRating;
         return newRating;
+    }
+
+    @Override
+    public Tale saveTale(TaleDto taleDto) {
+        Genre genre = genreRepository.findByType(taleDto.getGenre());
+        Author author = authorRepository.findByName(taleDto.getAuthor());
+        Tale tale = new Tale(taleDto.getTitle(), author, genre, taleDto.getDescription(),
+                0, 0.0f, "");
+        genre.getTales().add(tale);
+        author.getTales().add(tale);
+        return taleRepository.save(tale);
     }
 }

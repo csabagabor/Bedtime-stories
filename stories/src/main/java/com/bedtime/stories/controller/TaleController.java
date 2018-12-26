@@ -1,8 +1,8 @@
 package com.bedtime.stories.controller;
 
 import com.bedtime.stories.model.Tale;
+import com.bedtime.stories.model.TaleDto;
 import com.bedtime.stories.service.TaleService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -10,6 +10,7 @@ import com.monitorjbl.json.JsonViewModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -62,10 +63,15 @@ public class TaleController {
     }
 
     @GetMapping(value = "/top/{limit}", produces = "application/json")
-    public List<Tale> getTopTales(@PathVariable int limit) throws JsonProcessingException {
+    public List<Tale> getTopTales(@PathVariable int limit) {
         //limit is 25 currently, can be changed later if there is need
         return taleService.getTopTales();
     }
 
+
+    @PostMapping(value = "/tales", produces = "application/json")
+    public Tale addTale(@Valid @RequestBody TaleDto taleDto) throws Exception {
+        return taleService.saveTale(taleDto);
+    }
 
 }

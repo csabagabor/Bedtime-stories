@@ -9,6 +9,9 @@ var registerURL = serverUrl + "/api/signup";
 var loginURL = serverUrl + "/token/generate-token";
 var changePassURL = serverUrl + "/token/changePassword";
 var changeUserURL = serverUrl + "/token/changeUser";
+var postTale = serverUrl + "/api/tale/tales";
+var getGenres = serverUrl + "/api/genre/";
+var getAuthors = serverUrl + "/api/author/";
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
