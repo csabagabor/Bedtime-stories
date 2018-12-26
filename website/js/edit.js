@@ -116,6 +116,14 @@ async function main(){
      class="btn btn-primary btn-sm">Log In</button>
     `);
   }
+  else if(!isAdmin(user)){
+    showLoadingScreenMessage("You are not an ADMIN!",`
+    <p style="color: black;">Go back to
+     <button id="btn_SignUp" type="button" e,
+      onclick="window.open('index.html', '_self', 'resizable=yes')"
+     class="btn btn-primary btn-sm">Home</button>
+    `);
+  }
   else{
     appendGenres();
     appendAuthors();
