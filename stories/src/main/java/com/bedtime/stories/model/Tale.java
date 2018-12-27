@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 
 /*
@@ -32,7 +34,7 @@ from generate_series(
   '1 day'::interval
 ) date;
  */
-@Entity(name = "Tale")
+@Entity
 @Table(name = "tale")
 public class Tale {
 
@@ -62,16 +64,6 @@ public class Tale {
 
 
     private String dateAdded;
-
-
-    @OneToMany(
-            mappedBy = "tale",
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            }
-    )
-    private List<UserTale> usersRatings = new ArrayList<>();
 
 
     @ManyToMany(fetch = FetchType.EAGER,
@@ -169,15 +161,6 @@ public class Tale {
 
     public void setUsers(Set<User> users) {
         this.users = users;
-    }
-
-    @JsonIgnore
-    public List<UserTale> getUsersRatings() {
-        return usersRatings;
-    }
-
-    public void setUsersRatings(List<UserTale> usersRatings) {
-        this.usersRatings = usersRatings;
     }
 
     @Override
