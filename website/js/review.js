@@ -97,7 +97,6 @@ async function getTopTales(){
                '<a onclick=deletePosted(this) id="tale-id2-' + data[i].id +'" class="li-modal btn btn-danger">Deny</a>' +
               '</br></br><label for="Dates"><span>*</span> Date when story will appear</label>'+
               "<select class='custom-select form-control Dates' name='Dates' id='Dates" +data[i].id +  "'>"+
-                "<option selected>Choose...</option>" +
               "</select>"+
              '</div></div>');
          }

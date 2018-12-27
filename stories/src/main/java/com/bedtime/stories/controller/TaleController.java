@@ -144,8 +144,11 @@ public class TaleController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/tales/{date}", produces = "application/json")
-    public ObjectNode deleteTale(@PathVariable String date) throws Exception {
-        taleService.deleteTaleByDate(date);
+    public ObjectNode deleteTale(@PathVariable String date,
+                                 @RequestHeader HttpHeaders httpHeaders) throws Exception {
+        String token = getTokenFromHeader(httpHeaders);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        taleService.deleteTaleByDate(username, date);
         ObjectNode objectNode = mapper.createObjectNode();
         objectNode.put("success", "true");
         return objectNode;

@@ -22,7 +22,7 @@ public interface TaleService {
 
     Tale updateTale(String date, TaleDto taleDto);
 
-    void deleteTaleByDate(String date);
+    void deleteTaleByDate(String username, String date);
 
     List<Tale> getPostedTales();
 

@@ -52,11 +52,14 @@ async function sendData(registerData){
           },
           error: function(err) {
               try{
-                var str = "";
-                err.responseJSON.message.forEach(function(item) {
-                  str += item +"</br>";
-                });
-              addErrorMessage(str);
+                if(err.responseJSON.message instanceof Array){
+                      var str = "";
+                      err.responseJSON.message.forEach(function(item) {
+                        str += item +"</br>";
+                      });
+                    addErrorMessage(str);
+                }
+                else addErrorMessage(err.responseJSON.message);
             }
             catch(e){
               addErrorMessage("Cannot send your request! Please try again!");

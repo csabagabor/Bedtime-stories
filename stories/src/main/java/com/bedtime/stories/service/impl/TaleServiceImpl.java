@@ -162,8 +162,12 @@ public class TaleServiceImpl implements TaleService {
     }
 
     @Override
-    public void deleteTaleByDate(String date) {
+    public void deleteTaleByDate(String username, String date) {
         Tale tale = taleRepository.getTaleByDateAdded(date);
+        tale.getUsers().clear();
+        User user = userRepository.findByUsername(username);
+        user.getTales().remove(tale);
+        userRepository.save(user);
         taleRepository.delete(tale);
     }
 
@@ -204,7 +208,7 @@ public class TaleServiceImpl implements TaleService {
     @Override
     public List<String> getAllFullDates() {
         List<Tale> tales = (List<Tale>) taleRepository.findAll();
-        return tales.stream().map(t -> LocalDate.parse(t.getDateAdded()))
+        return tales.stream().filter(t -> !t.getDateAdded().equals("")).map(t -> LocalDate.parse(t.getDateAdded()))
                 .sorted().map(LocalDate::toString)
                 .collect(Collectors.toList());
     }
