@@ -4,12 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 
-@Entity
+@Entity(name = "User")
 @Table(name = "user")
 public class User {
     @Id
@@ -26,6 +24,15 @@ public class User {
     @JsonIgnore
     private String passwordHash;
 
+
+    @OneToMany(
+            mappedBy = "user",
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
+    )
+    private List<UserTale> talesRatings = new ArrayList<>();
 
 
     @ManyToMany(fetch = FetchType.EAGER,
@@ -59,6 +66,28 @@ public class User {
         this.username = username;
         this.email = email;
         this.passwordHash = passwordHash;
+    }
+
+
+    public void addTaleRatings(Tale tale) {
+        UserTale userTale = new UserTale(this, tale);
+        talesRatings.add(userTale);
+        tale.getUsersRatings().add(userTale);
+    }
+
+    public void removeTaleRatings(Tale tale) {
+        for (Iterator<UserTale> iterator = talesRatings.iterator();
+             iterator.hasNext(); ) {
+            UserTale userTale = iterator.next();
+
+            if (userTale.getUser().equals(this) &&
+                    userTale.getTale().equals(tale)) {
+                iterator.remove();
+                userTale.getTale().getUsersRatings().remove(userTale);
+                userTale.setUser(null);
+                userTale.setTale(null);
+            }
+        }
     }
 
     public Long getId() {
@@ -109,6 +138,14 @@ public class User {
         this.tales = tales;
     }
 
+    public List<UserTale> getTalesRatings() {
+        return talesRatings;
+    }
+
+    public void setTalesRatings(List<UserTale> talesRatings) {
+        this.talesRatings = talesRatings;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -118,12 +155,14 @@ public class User {
                 Objects.equals(username, user.username) &&
                 Objects.equals(email, user.email) &&
                 Objects.equals(passwordHash, user.passwordHash) &&
-                Objects.equals(roles, user.roles);
+                Objects.equals(talesRatings, user.talesRatings) &&
+                Objects.equals(roles, user.roles) &&
+                Objects.equals(tales, user.tales);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, email, passwordHash, roles);
+        return Objects.hash(id, username, email, passwordHash, talesRatings, roles, tales);
     }
 
     @Override
@@ -133,7 +172,9 @@ public class User {
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +
+                ", talesRatings=" + talesRatings +
                 ", roles=" + roles +
+                ", tales=" + tales +
                 '}';
     }
 }

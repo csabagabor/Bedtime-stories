@@ -1,12 +1,10 @@
 package com.bedtime.stories.service.impl;
 
-import com.bedtime.stories.model.Author;
-import com.bedtime.stories.model.Genre;
-import com.bedtime.stories.model.Tale;
-import com.bedtime.stories.model.TaleDto;
+import com.bedtime.stories.model.*;
 import com.bedtime.stories.repository.AuthorRepository;
 import com.bedtime.stories.repository.GenreRepository;
 import com.bedtime.stories.repository.TaleRepository;
+import com.bedtime.stories.repository.UserRepository;
 import com.bedtime.stories.service.TaleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +16,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class TaleServiceImpl implements TaleService {
-
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private TaleRepository taleRepository;
@@ -46,7 +45,15 @@ public class TaleServiceImpl implements TaleService {
         nrRating++;
         tale.setRating(newRating);
         tale.setNrRating(nrRating);
-        return taleRepository.save(tale);
+        //
+        User user = userRepository.findByUsername("user1");
+        user.addTaleRatings(tale);
+        taleRepository.save(tale);
+
+        userRepository.save(user);
+
+        //
+        return tale;
     }
 
     @Override
@@ -151,7 +158,10 @@ public class TaleServiceImpl implements TaleService {
 
     @Override
     public List<String> getAllFullDates() {
+        LocalDate dt = LocalDate.parse("2005-11-12");
         List<Tale> tales = (List<Tale>) taleRepository.findAll();
-        return tales.stream().map(Tale::getDateAdded).collect(Collectors.toList());
+        return tales.stream().map(t -> LocalDate.parse(t.getDateAdded()))
+                .sorted().map(LocalDate::toString)
+                .collect(Collectors.toList());
     }
 }
