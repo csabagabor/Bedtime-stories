@@ -23,8 +23,8 @@ $('#profileForm').submit(function(e) {
   }
   else{
     var registerData = {
-      OldPassword: values["OldPassword"],
-      password: values["Password1"],
+      oldPassword: values["OldPassword"],
+      newPassword: values["Password1"],
     };
     sendData(registerData);
   }
@@ -35,35 +35,45 @@ $('#profileForm').submit(function(e) {
 
 
 async function sendData(registerData){
-  var success = false;
-  //send to server
-  await $.ajax({
-    url: changePassURL+"/"+user.username,
-    type: "PUT",
-    data: JSON.stringify(registerData),
-    dataType: "json",
-    contentType: "application/json",
-    success: function(data) {
-      addSuccessMessage("Information succesfully updated!<br> You will be logged out shortly");
-      console.log(data);
-      //need to change token if user info was updated so better log out the user
-      success = true;
-    },
-    error: function(err) {
-        try{
-        addErrorMessage(err.responseJSON.message);
-      }
-      catch(e){
-        addErrorMessage("Cannot send your request! Please try again!");
-      }
-      console.log(err);
-    }
-  });
+  try{
+          var success = false;
+          //send to server
+          await $.ajax({
+            url: changePassURL+"/"+user.username,
+            type: "PUT",
+            data: JSON.stringify(registerData),
+            dataType: "json",
+            contentType: "application/json",
+            success: function(data) {
+              addSuccessMessage("Information succesfully updated!<br> You will be logged out shortly");
+              console.log(data);
+              //need to change token if user info was updated so better log out the user
+              success = true;
+            },
+            error: function(err) {
+                try{
+                  if(err.responseJSON.message instanceof Array){
+                        var str = "";
+                        err.responseJSON.message.forEach(function(item) {
+                          str += item +"</br>";
+                        });
+                      addErrorMessage(str);
+                  }
+                  else addErrorMessage(err.responseJSON.message);
+              }
+              catch(e){
+                addErrorMessage("Cannot send your request! Please try again!");
+              }
+              console.log(err);
+            }
+          });
 
-  if(success){
-    await sleep(2000);
-    logout();
-  }
+          if(success){
+            await sleep(2000);
+            logout();
+          }
+    }
+catch(e){}
 }
 
 

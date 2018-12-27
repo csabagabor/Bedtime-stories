@@ -2,20 +2,21 @@ package com.bedtime.stories.model;
 
 import org.hibernate.validator.constraints.SafeHtml;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class UserDto {
 
-    @NotEmpty
     @SafeHtml
+    @Size(min=5, message="Username should have at least 5 characters")
     private String username;
 
-    @NotEmpty
     @SafeHtml
+    @Pattern(regexp=".+@.+\\..+", message="Please provide a valid email address")
     private String email;
 
-    @NotEmpty
     @SafeHtml
+    @Size(min=8, message="Password should have at least 8 characters")
     private String password;
 
 

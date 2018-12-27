@@ -3,11 +3,13 @@ package com.bedtime.stories.model;
 import org.hibernate.validator.constraints.SafeHtml;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 public class TaleDto {
 
     @NotEmpty
     @SafeHtml
+    @Size(min=2, message="Title should have at least 2 characters")
     private String title;
 
     @NotEmpty
@@ -20,6 +22,7 @@ public class TaleDto {
 
     @NotEmpty
     @SafeHtml
+    @Size(min=20, message="Description should have at least 20 characters")
     private String description;
 
     @SafeHtml

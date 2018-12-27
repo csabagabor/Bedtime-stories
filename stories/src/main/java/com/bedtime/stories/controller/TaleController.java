@@ -1,6 +1,7 @@
 package com.bedtime.stories.controller;
 
 import com.bedtime.stories.config.TokenProvider;
+import com.bedtime.stories.exception.ApiErrors;
 import com.bedtime.stories.model.Rating;
 import com.bedtime.stories.model.Tale;
 import com.bedtime.stories.model.TaleDto;
@@ -11,8 +12,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.monitorjbl.json.JsonViewModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -117,14 +121,25 @@ public class TaleController {
 
 
     @PostMapping(value = "/tales", produces = "application/json")
-    public Tale addTale(@Valid @RequestBody TaleDto taleDto) throws Exception {
-        return taleService.saveTale(taleDto);
+    public ResponseEntity<?> addTale(@Valid @RequestBody TaleDto taleDto,
+                                     Errors errors) throws Exception {
+        if(errors.hasErrors()){
+            return new ResponseEntity<>(new ApiErrors(errors), HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(taleService.saveTale(taleDto), HttpStatus.OK);
+    }
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/tales/{date}", produces = "application/json")
-    public Tale modifyTale(@PathVariable String date, @Valid @RequestBody TaleDto taleDto) throws Exception {
-        return taleService.updateTale(date, taleDto);
+    public ResponseEntity<?> modifyTale(@PathVariable String date,
+                                        @Valid @RequestBody TaleDto taleDto,
+                                        Errors errors) throws Exception {
+        if(errors.hasErrors()){
+            return new ResponseEntity<>(new ApiErrors(errors), HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(taleService.updateTale(date, taleDto), HttpStatus.OK);
+        }
     }
 
     @PreAuthorize("hasRole('ADMIN')")

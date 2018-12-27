@@ -21,6 +21,7 @@ $('#profileForm').submit(function(e) {
   var registerData = {
     username: values["UserName"],
     email: values["EmailAddress"],
+    password: values["Password"],//password won't be changed but the backend needs it
   };
 
 
@@ -33,36 +34,43 @@ $('#profileForm').submit(function(e) {
 });
 
 async function sendData(registerData){
-  var success = false;
+  try{
+        var success = false;
 
-  await $.ajax({
-    url: changeUserURL+"/"+user.username,
-    type: "PUT",
-    data: JSON.stringify(registerData),
-    dataType: "json",
-    contentType: "application/json",
-    success: function(data) {
-      //window.open('verify.html', '_self', 'resizable=yes')
-      addSuccessMessage("Information succesfully updated!<br> You will be logged out shortly");
-      console.log(data);
-      //need to change token if user info was updated so better log out the user
-      success = true;
-    },
-    error: function(err) {
-        try{
-        addErrorMessage(err.responseJSON.message);
-      }
-      catch(e){
-        addErrorMessage("Cannot send your request! Please try again!");
-      }
-      console.log(err);
-    }
-  });
+        await $.ajax({
+          url: changeUserURL+"/"+user.username,
+          type: "PUT",
+          data: JSON.stringify(registerData),
+          dataType: "json",
+          contentType: "application/json",
+          success: function(data) {
+            //window.open('verify.html', '_self', 'resizable=yes')
+            addSuccessMessage("Information succesfully updated!<br> You will be logged out shortly");
+            console.log(data);
+            //need to change token if user info was updated so better log out the user
+            success = true;
+          },
+          error: function(err) {
+              try{
+                var str = "";
+                err.responseJSON.message.forEach(function(item) {
+                  str += item +"</br>";
+                });
+              addErrorMessage(str);
+            }
+            catch(e){
+              addErrorMessage("Cannot send your request! Please try again!");
+            }
+            console.log(err);
+          }
+        });
 
-  if(success){
-    await sleep(2000);
-    logout();
-  }
+        if(success){
+          await sleep(2000);
+          logout();
+        }
+      }
+    catch(e){}
 }
 
 async function main(){
