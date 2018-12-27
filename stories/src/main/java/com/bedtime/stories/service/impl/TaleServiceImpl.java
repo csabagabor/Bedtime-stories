@@ -92,6 +92,33 @@ public class TaleServiceImpl implements TaleService {
         return taleRepository.findTop25ByOrderByRatingDesc();
     }
 
+    @Override
+    public List<Tale> getSearchTales(String authorName, String genreType, String rating) {
+        Author author = null;
+        Genre genre = null;
+        List<Tale> searchedtales = null;
+        if (!authorName.equals("All"))
+            author = authorRepository.findByName(authorName);
+        if (!genreType.equals("All"))
+            genre = genreRepository.findByType(genreType);
+
+        if (author != null && genre != null)
+            searchedtales = taleRepository.findByAuthorAndGenre(author, genre);
+        else if (author != null)
+            searchedtales = taleRepository.findByAuthor(author);
+        else if (genre != null)
+            searchedtales = taleRepository.findByGenre(genre);
+        else
+            searchedtales = (List<Tale>) taleRepository.findAll();
+
+        if (rating.equals("Under 3"))
+            return searchedtales.stream().filter(t -> t.getRating() < 3.0).collect(Collectors.toList());
+        if (rating.equals("Under 4"))
+            return searchedtales.stream().filter(t -> t.getRating() < 4.0).collect(Collectors.toList());
+        else if (rating.equals("Above 4"))
+            return searchedtales.stream().filter(t -> t.getRating() >= 4.0).collect(Collectors.toList());
+        else return searchedtales;
+    }
 
     private float calculateRating(float overallRating, int nrRating, int rating) {
         float newRating = (overallRating * nrRating + rating) / (nrRating + 1);
@@ -181,4 +208,6 @@ public class TaleServiceImpl implements TaleService {
                 .sorted().map(LocalDate::toString)
                 .collect(Collectors.toList());
     }
+
+
 }

@@ -34,4 +34,6 @@ public interface TaleService {
     List<String> getAllFullDates();
 
     Rating getRatingByDate(String username, String date);
+
+    List<Tale> getSearchTales(String author, String genre, String rating);
 }

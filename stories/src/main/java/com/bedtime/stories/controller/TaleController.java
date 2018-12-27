@@ -86,6 +86,14 @@ public class TaleController {
         return taleService.getRatingByDate(username, date);
     }
 
+    @PostMapping(value = "/search", produces = "application/json")
+    public List<Tale> getTopTales(@RequestBody Map<String, String> data) {
+        String author = data.get("author");
+        String genre = data.get("genre");
+        String rating = data.get("rating");
+        return taleService.getSearchTales(author, genre, rating);
+    }
+
     @GetMapping(value = "/top/{limit}", produces = "application/json")
     public List<Tale> getTopTales(@PathVariable int limit) {
         //limit is 25 currently, can be changed later if there is need
@@ -141,7 +149,7 @@ public class TaleController {
     @PutMapping(value = "/tales/id/{id}", produces = "application/json")
     public Tale updateTaleById(@PathVariable Long id, @RequestBody Map<String, String> date) throws Exception {
         String dateAdded = date.get("date");
-        return taleService.updateTaleById(id,dateAdded );
+        return taleService.updateTaleById(id, dateAdded);
     }
 
     private String getTokenFromHeader(HttpHeaders httpHeaders) {

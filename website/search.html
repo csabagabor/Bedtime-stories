@@ -50,7 +50,7 @@
 
 
       <div class="container">
-        <h1>Post new Tale</h1>
+        <h1>Search Tale</h1>
         <hr>
         <div class="row">
 
@@ -58,36 +58,38 @@
           <div class="col-md-9 personal-info">
             <div id="serverMessage"></div>
             <br />
-            <h3>Tale info</h3>
 
-            <form id="postForm" method="POST" role="form" class="form-horizontal">
-              <div class="form-group">
-                <label for="Title"><span>*</span> Title</label>
-                <input type="text" class="form-control" name="Title" id="Title">
-              </div>
+            <form id="searchForm" method="POST" role="form" class="form-horizontal">
               <div class="form-group">
                 <label for="Genre"><span>*</span> Genre</label>
                 <select class="custom-select form-control" name="Genre" id="Genre">
+                  <option selected>All</option>
                 </select>
               </div>
               <div class="form-group">
                 <label for="Author"><span>*</span> Author</label>
                 <select class="custom-select form-control" name="Author" id="Author">
+                  <option selected>All</option>
                 </select>
               </div>
               <div class="form-group">
-                <label for="Description"><span>*</span>Description</label>
-                <textarea rows="10" class="form-control" name="Description" id="Description" aria-label=""></textarea>
+                <label for="Rating"><span>*</span> Rating</label>
+                <select class="custom-select form-control" name="Rating" id="Rating">
+                  <option selected>All</option>
+                  <option selected>Under 3</option>
+                  <option selected>Under 4</option>
+                  <option selected>Above 4</option>
+                </select>
               </div>
+
               <div class="form-group">
                 <input hidden type="text" class="form-control" name="DateAdded" id="DateAdded">
               </div>
               <div class="form-group">
                 <label class="col-md-3 control-label"></label>
                 <div class="col-md-8">
-                  <input type="submit" class="btn btn-primary" value="Save Changes">
+                  <input type="submit" class="btn btn-primary" value="Search">
                   <span></span>
-                  <input type="reset" class="btn btn-default" value="Cancel">
                 </div>
               </div>
             </form>
@@ -99,13 +101,17 @@
     </div>
   </div>
 
+  
+  <div id ="my-content">
+
+  </div>
 
 
   <hr>
   <script type="text/javascript" src="./js/constants.js"></script>
   <script type="text/javascript" src="./js/error_handling.js"></script>
   <script type="text/javascript" src="./js/loading-screen.js"></script>
-  <script type="text/javascript" src="./js/post.js"></script>
+  <script type="text/javascript" src="./js/search.js"></script>
 </body>
 
 </html>
