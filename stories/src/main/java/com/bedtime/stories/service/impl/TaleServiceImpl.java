@@ -1,12 +1,7 @@
 package com.bedtime.stories.service.impl;
 
-import com.bedtime.stories.model.Author;
-import com.bedtime.stories.model.Genre;
-import com.bedtime.stories.model.Tale;
-import com.bedtime.stories.model.TaleDto;
-import com.bedtime.stories.repository.AuthorRepository;
-import com.bedtime.stories.repository.GenreRepository;
-import com.bedtime.stories.repository.TaleRepository;
+import com.bedtime.stories.model.*;
+import com.bedtime.stories.repository.*;
 import com.bedtime.stories.service.TaleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +24,12 @@ public class TaleServiceImpl implements TaleService {
     @Autowired
     private GenreRepository genreRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private RatingRepository ratingRepository;
+
     @Override
     public Tale getTaleByDate(String date) {
         return taleRepository.getTaleByDateAdded(date);
@@ -36,7 +37,7 @@ public class TaleServiceImpl implements TaleService {
 
 
     @Override
-    public Tale addRatingByDate(String date, int rating) throws Exception {
+    public Tale addRatingByDate(String username, String date, int rating) throws Exception {
         if (rating < 1 || rating > 5)
             throw new Exception("Rating must be between 1 and 5");
         Tale tale = taleRepository.getTaleByDateAdded(date);
@@ -46,11 +47,17 @@ public class TaleServiceImpl implements TaleService {
         nrRating++;
         tale.setRating(newRating);
         tale.setNrRating(nrRating);
+
+        //
+        User user = userRepository.findByUsername(username);
+        Rating ratingRow = new Rating(user.getId(), tale.getId(), rating);
+        ratingRepository.save(ratingRow);
+        //
         return taleRepository.save(tale);
     }
 
     @Override
-    public Tale updateRatingByDate(String date, int rating, int oldRating) throws Exception {
+    public Tale updateRatingByDate(String username, String date, int rating, int oldRating) throws Exception {
 
         if (rating < 1 || rating > 5)
             throw new Exception("Rating must be between 1 and 5");
@@ -61,7 +68,23 @@ public class TaleServiceImpl implements TaleService {
             throw new Exception("No rating was given so far");
         float newRating = calculateRating(overallRating, nrRating, rating, oldRating);
         tale.setRating(newRating);
+
+        //
+        User user = userRepository.findByUsername(username);
+        Rating ratingRow = ratingRepository.findByUserIdAndTaleId(user.getId(), tale.getId());
+        ratingRow.setRating(rating);
+        ratingRepository.save(ratingRow);
+        //
+
+
         return taleRepository.save(tale);
+    }
+
+    @Override
+    public Rating getRatingByDate(String username, String date) {
+        User user = userRepository.findByUsername(username);
+        Tale tale = taleRepository.getTaleByDateAdded(date);
+        return ratingRepository.findByUserIdAndTaleId(user.getId(), tale.getId());
     }
 
     @Override
@@ -138,20 +161,24 @@ public class TaleServiceImpl implements TaleService {
     @Override
     public List<String> getAllAvailableDates() {
         List<String> fillDates = getAllFullDates();
-        List<String> availableDates = new ArrayList<>();
+        List<LocalDate> availableDates = new ArrayList<>();
 
         for (LocalDate date = LocalDate.of(2018, 11, 10);
              date.isBefore(LocalDate.of(2019, 1, 29)); date = date.plusDays(1)) {
             if (!fillDates.contains(date.toString())) {
-                availableDates.add(date.toString());
+                availableDates.add(date);
             }
         }
-        return availableDates;
+        return availableDates.stream()
+                .sorted().map(LocalDate::toString)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<String> getAllFullDates() {
         List<Tale> tales = (List<Tale>) taleRepository.findAll();
-        return tales.stream().map(Tale::getDateAdded).collect(Collectors.toList());
+        return tales.stream().map(t -> LocalDate.parse(t.getDateAdded()))
+                .sorted().map(LocalDate::toString)
+                .collect(Collectors.toList());
     }
 }

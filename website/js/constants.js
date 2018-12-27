@@ -19,7 +19,7 @@ var deleteTaleByIdURL = serverUrl + "/api/tale/tales/id/";
 var updateTaleByIdURL = serverUrl + "/api/tale/tales/id/";
 var fullDatesUrl = serverUrl + "/api/tale/dates/full";
 var availableDatesUrl = serverUrl + "/api/tale/dates";
-
+var apiOwnRatingURL = serverUrl+"/api/tale/rating/custom/";
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));

@@ -18,7 +18,7 @@ INSERT INTO genre (id, type) VALUES (1, "fairytale");
 INSERT INTO genre (id, type) VALUES (2, "short");
 
    INSERT INTO tale (id, title, description, genre_id, author_id, date_added, rating, nr_rating)
-    VALUES (1, "short story1","description1", 1,1,"2018-12-20", 4.2, 1);
+    VALUES (1, "short story1","description1", 1,1,"2018-12-20", 4.0, 1);
 
 INSERT INTO tale (id, title, description, genre_id, author_id, date_added, rating, nr_rating)
  VALUES (2, "short story2","description2", 1,1,"2018-12-21", 1.5, 100);
@@ -30,7 +30,7 @@ INSERT INTO tale (id, title, description, genre_id, author_id, date_added, ratin
    VALUES (4, "short story4","description4", 2,2,"2018-12-23", 5.0, 5);
 
    INSERT INTO tale (id, title, description, genre_id, author_id, date_added, rating, nr_rating)
-    VALUES (5, "short story5","description5", 2,2,"2018-12-24", 4.2, 1);
+    VALUES (5, "short story5","description5", 2,2,"2018-12-24", 4.0, 1);
 
      INSERT INTO tale (id, title, description, genre_id, author_id, date_added, rating, nr_rating)
         VALUES (6, "short story6","description6", 2,2,"2018-12-25", 0.0, 0)

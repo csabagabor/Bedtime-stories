@@ -5,7 +5,9 @@ drop table if exists author;
 drop table if exists genre;
 drop table if exists tale;
 drop table if exists user_tales;
+drop table if exists rating;
 
+create table rating (id bigint not null auto_increment, user_id bigint not null, tale_id bigint not null,rating bigint, primary key (id)) engine=MyISAM;
 create table role (id bigint not null auto_increment, description varchar(255), name varchar(255), primary key (id)) engine=MyISAM;
 create table user (id bigint not null auto_increment, password_hash varchar(255), username varchar(255),email varchar(255), primary key (id)) engine=MyISAM;
 create table user_roles (user_id bigint not null, role_id bigint not null, primary key (user_id, role_id)) engine=MyISAM;

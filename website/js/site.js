@@ -29,24 +29,28 @@ function getTaleByURL(url){
   else getTaleByDate(formatDateToString(new Date()));//show today's tale
 }
 
-function getTaleByDate(date){
+async function getTaleByDate(date){
   currentTaleDate = date;
   let getURL = apiTaleURL;
   getURL+=date;
   $.ajax({
       url: getURL
   }).then(function(data) {
-     if(formatDateToString(new Date()) !== date){
-       $('#story-big-title').text("Tale: "+date);
+     if(data ==""){
+       addErrorMessage("Tale not available! Try another one!");
      }
-     $('#tale-genre').text("Genre: "+data.genre.type);
-     $('#tale-author').text("Author: "+data.author.name);
-     $('#tale-title').text(data.title);
-     $('#tale-description').text(data.description);
-
+     else{
+       if(formatDateToString(new Date()) !== date){
+         $('#story-big-title').text("Tale: "+date);
+       }
+       $('#tale-genre').text("Genre: "+data.genre.type);
+       $('#tale-author').text("Author: "+data.author.name);
+       $('#tale-title').text(data.title);
+       $('#tale-description').text(data.description);
+     }
   });
   //show user's Rating
-  var rating = getOwnRatingByDate(date);
+  var rating = await getOwnRatingByDate(date);
   appendRating(rating);
   showTaleRatingByDate(date);
   appendFavorite(date);
@@ -62,18 +66,27 @@ function showTaleRatingByDate(date){
   });
 }
 
-function getOwnRatingByDate(date){
-  var rating = localStorage.getItem("rating"+date);
-  if(rating === null)
-     rating = 0;
-  return Number(rating);
+async function getOwnRatingByDate(date){
+  var rating = 0;
+  var success = false;
+  await $.ajax({
+      url: apiOwnRatingURL+date
+  }).then(function(data) {
+     if(data.rating){
+       rating = data.rating;
+       success = true;
+    }
+  });
+  if(success)
+    return Number(rating);
+  else return 0;
 }
 
-function setOwnRatingByDate(date, rating){
+async function setOwnRatingByDate(date, rating){
   //send data to api
   var ratingData;
   var httpMethod = 'POST';
-  var oldRating = getOwnRatingByDate(date);
+  var oldRating = await getOwnRatingByDate(date);
   //check if it has been rated before or not
   if(oldRating === 0){//not rated
     ratingData = {
@@ -104,8 +117,6 @@ function setOwnRatingByDate(date, rating){
       console.log(err);
     }
   });
-  //save rating to localstorage
-  localStorage.setItem("rating"+date, rating);
 }
 
 function appendRating(rating){

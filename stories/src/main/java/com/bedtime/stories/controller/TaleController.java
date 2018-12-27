@@ -1,5 +1,7 @@
 package com.bedtime.stories.controller;
 
+import com.bedtime.stories.config.TokenProvider;
+import com.bedtime.stories.model.Rating;
 import com.bedtime.stories.model.Tale;
 import com.bedtime.stories.model.TaleDto;
 import com.bedtime.stories.service.TaleService;
@@ -8,7 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.monitorjbl.json.JsonViewModule;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,6 +24,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/tale")
 public class TaleController {
+
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private TokenProvider jwtTokenUtil;
 
     @Autowired
     private TaleService taleService;
@@ -48,20 +59,31 @@ public class TaleController {
 
 
     @PutMapping(value = "/rating/{date}", produces = "application/json")
-    public Tale updateRatingByDate(@PathVariable String date,
+    public Tale updateRatingByDate(@RequestHeader HttpHeaders httpHeaders, @PathVariable String date,
                                    @RequestBody String body) throws Exception {
+        String token = getTokenFromHeader(httpHeaders);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
         JsonNode jsonNode = mapper.readTree(body);
         int rating = jsonNode.get("rating").intValue();
         int oldRating = jsonNode.get("oldRating").intValue();
-        return taleService.updateRatingByDate(date, rating, oldRating);
+        return taleService.updateRatingByDate(username, date, rating, oldRating);
     }
 
     @PostMapping(value = "/rating/{date}", produces = "application/json")
-    public Tale addRatingByDate(@PathVariable String date,
+    public Tale addRatingByDate(@RequestHeader HttpHeaders httpHeaders, @PathVariable String date,
                                 @RequestBody String body) throws Exception {
+        String token = getTokenFromHeader(httpHeaders);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
         JsonNode jsonNode = mapper.readTree(body);
         int rating = jsonNode.get("rating").intValue();
-        return taleService.addRatingByDate(date, rating);
+        return taleService.addRatingByDate(username, date, rating);
+    }
+
+    @GetMapping(value = "/rating/custom/{date}", produces = "application/json")
+    public Rating getOwnRatingByDate(@RequestHeader HttpHeaders httpHeaders, @PathVariable String date) throws Exception {
+        String token = getTokenFromHeader(httpHeaders);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        return taleService.getRatingByDate(username, date);
     }
 
     @GetMapping(value = "/top/{limit}", produces = "application/json")
@@ -120,6 +142,13 @@ public class TaleController {
     public Tale updateTaleById(@PathVariable Long id, @RequestBody Map<String, String> date) throws Exception {
         String dateAdded = date.get("date");
         return taleService.updateTaleById(id,dateAdded );
+    }
+
+    private String getTokenFromHeader(HttpHeaders httpHeaders) {
+        Map<String, String> headerMap = httpHeaders.toSingleValueMap();
+        String token = headerMap.get("authorization");
+        token = token.replace("Bearer ", "");
+        return token;
     }
 
 }

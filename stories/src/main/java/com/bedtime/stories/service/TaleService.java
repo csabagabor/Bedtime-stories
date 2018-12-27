@@ -1,6 +1,7 @@
 package com.bedtime.stories.service;
 
 
+import com.bedtime.stories.model.Rating;
 import com.bedtime.stories.model.Tale;
 import com.bedtime.stories.model.TaleDto;
 
@@ -11,8 +12,10 @@ import java.util.List;
  */
 public interface TaleService {
     Tale getTaleByDate(String date);
-    Tale addRatingByDate(String date, int rating) throws Exception;
-    Tale updateRatingByDate(String date, int rating, int oldRating) throws Exception;
+    Tale addRatingByDate(String username, String date, int rating) throws Exception;
+    Tale updateRatingByDate(String username, String date, int rating, int oldRating) throws Exception;
+
+
     List<Tale> getTopTales();
 
     Tale saveTale(TaleDto taleDto);
@@ -29,4 +32,6 @@ public interface TaleService {
 
     List<String> getAllAvailableDates();
     List<String> getAllFullDates();
+
+    Rating getRatingByDate(String username, String date);
 }

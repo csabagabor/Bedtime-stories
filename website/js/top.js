@@ -21,8 +21,12 @@ async function getTopTales(limit){
                '<div class="card-body">' +
 
                "<h2>Top " +(i+1)+ " </br> " + data[i].title + "</h2>" +
-               "<p class='card-text'>" +  data[i].description.substring(0, 40) + '...' + '</p>' +
+               "<h7>Author: " + data[i].author.name + "</h7></br>" +
+               "<h7>Genre: " + data[i].genre.type + "</h7>" +
+               "<hr><p class='card-text'>" +  data[i].description.substring(0, 40) + '...' + '</p><hr>' +
                '<h5>Date added: '+ data[i].dateAdded +  '</h5>' +
+               '<p>Rating: '+ data[i].rating +  '</p>' +
+               '<p>Number of Ratings: '+ data[i].nrRating +  '</p>' +
                '<p id="rating-date-' + data[i].dateAdded + '"></p>' +
                '<a href="./index.html?date=' +data[i].dateAdded +  '"id="tale-date-' + data[i].dateAdded +'" class="li-modal btn btn-info">See Full description</a>' +
              '</div></div>');
