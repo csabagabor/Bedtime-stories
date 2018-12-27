@@ -16,7 +16,7 @@ create table user_tales (user_id bigint not null, tale_id bigint not null, prima
 create table author (id bigint not null auto_increment, name varchar(255), primary key (id)) engine=MyISAM;
 create table genre (id bigint not null auto_increment, type varchar(255), primary key (id)) engine=MyISAM;
 create table tale (id bigint not null auto_increment, title varchar(255), author_id bigint not null, genre_id bigint not null, description
-  varchar(255),date_added varchar(255), rating float, nr_rating bigint, primary key (id)) engine=MyISAM;
+  varchar(35500),date_added varchar(255), rating float, nr_rating bigint, primary key (id)) engine=MyISAM;
 
 
 alter table tale add constraint FKrx9tnx5kyftwctq3uqv159t5j foreign key (author_id) references author (id);
