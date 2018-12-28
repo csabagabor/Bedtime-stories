@@ -6,7 +6,9 @@ import com.bedtime.stories.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
@@ -24,6 +26,9 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<Author> findAll() {
-        return (List<Author>) authorRepository.findAll();
+        return ((List<Author>) authorRepository.findAll()).
+                stream().
+                sorted(Comparator.comparing(Author::getName)).
+                collect(Collectors.toList());
     }
 }
