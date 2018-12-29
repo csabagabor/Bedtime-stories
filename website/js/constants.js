@@ -1,4 +1,5 @@
-var serverUrl = "http://localhost:8080";
+//var serverUrl = "http://localhost:8080";
+var serverUrl = "https://limitless-thicket-62029.herokuapp.com";
 var apiTaleURL = serverUrl+"/api/tale/";
 var apiRatingURL = serverUrl+"/api/tale/rating/";
 var checkLoginURL = serverUrl + "/token/check-login";
