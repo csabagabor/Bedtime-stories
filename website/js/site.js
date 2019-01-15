@@ -1,5 +1,6 @@
 
 var currentTaleDate;
+var read = false;
 
 var getDates = function(startDate, endDate) {
   var dates = [],
@@ -162,6 +163,55 @@ function appendFavorite(date){
       $("#favorite").attr("src","http://icons.iconarchive.com/icons/custom-icon-design/flatastic-3/32/favorites-add-icon.png");
     }
   });
+}
+
+ function stopText(){
+   read = false;
+   $("#speech").attr("src","./img/Microphone.png");
+   $("#play").attr("src","./img/play.png");
+   if ('speechSynthesis' in window) {
+     window.speechSynthesis.cancel();
+   }
+ }
+
+function readText(){
+  if(!read){
+    read = true;
+    $("#speech").attr("src","./img/Microphone2.png");
+    $("#play").attr("src","./img/pause.jfif");
+    if ('speechSynthesis' in window) {
+          var msg = new SpeechSynthesisUtterance($("#tale-description").html());
+          window.speechSynthesis.resume();
+          window.speechSynthesis.speak(msg);
+    }
+  }
+  else{
+    read = false;
+    $("#speech").attr("src","./img/Microphone3.png");
+    $("#play").attr("src","./img/play.png");
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.pause();
+    }
+  }
+
+}
+
+function removeRecord(){
+  //console.log($( ".goog-te-combo option:selected" ).text());
+  if($( ".goog-te-combo option:selected" ).text() !="English" && $(".goog-te-combo option:selected" ).text() !="Select Language"){
+    $("#speech").hide();
+    $("#play").hide();
+    $("#stop").hide();
+  }
+  else{
+    $("#speech").show();
+    $("#play").show();
+    $("#stop").show();
+  }
+}
+
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
 }
 
 function addToFavorite(){

@@ -16,7 +16,7 @@
     <link href="./css/style.css" rel="stylesheet" type="text/css">
 </head>
 
-<body>
+<body class="notranslate">
   <div class="fadeMe">
 
   </div>
@@ -68,12 +68,17 @@
       <div class="card-body">
         <div id="serverMessage"></div>
         <h1 id="story-big-title">Today's Bedtime Story</h1>
-        <h2 id="tale-title"></h2>
+        <h2 id="tale-title" class="translate"></h2>
         <h5 class="text-left" id="tale-author">Author:</h2>
         <h6 class="text-left" id="tale-genre">Genre:</h2>
+          <input id="speech"  width="40px" height="40px" type="image" src="./img/Microphone.png" />
+
+          <input id="play" style="margin-left: 20px"  width="40px" height="40px" onclick = "readText()" type="image" src="./img/play.png" />
+          <input id="stop" style="margin-left: 20px"  width="40px" height="40px" onclick = "stopText()" type="image" src="./img/stop.png" />
+          <div onclick = "removeRecord()" id="google_translate_element"></div>
           <hr />
           <br />
-        <p id="tale-description" class="card-text">
+        <p id="tale-description" class="card-text translate">
 
         </p>
         <br />
@@ -106,6 +111,7 @@
   <script type="text/javascript" src="./js/error_handling.js"></script>
   <script type="text/javascript" src="./js/loading-screen.js"></script>
   <script type="text/javascript" src="./js/site.js"></script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 
 </html>
