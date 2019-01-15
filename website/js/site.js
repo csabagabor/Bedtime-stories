@@ -1,7 +1,7 @@
 
 var currentTaleDate;
 var read = false;
-
+var firstTime = true;
 var getDates = function(startDate, endDate) {
   var dates = [],
       currentDate = startDate,
@@ -31,6 +31,8 @@ function getTaleByURL(url){
 }
 
 async function getTaleByDate(date){
+  $("#my-content").hide();
+  $("#tale-today").show();
   currentTaleDate = date;
   let getURL = apiTaleURL;
   getURL+=date;
@@ -157,6 +159,109 @@ function appendItemsToArchiveList(){
   });
 }
 
+
+
+function appendItemsToGenreList(){
+  var archiveListElem = document.getElementById("genre-list");
+  $.get(getGenres, function(data, status){
+    data.forEach(function(item){
+      var val = item.type;
+      var listItem = document.createElement("a");
+      listItem.appendChild(document.createTextNode(val));
+      listItem.href = "javascript:showTalesByGenre('"+val+"');";
+      listItem.className = "dropdown-item";
+      archiveListElem.appendChild(listItem);
+    });
+  });
+}
+
+
+function appendItemsToAuthorList(){
+  var archiveListElem = document.getElementById("author-list");
+  $.get(getAuthors, function(data, status){
+    data.forEach(function(item){
+      var val = item.name;
+      var listItem = document.createElement("a");
+      listItem.appendChild(document.createTextNode(val));
+      listItem.href = "javascript:showTalesByAuthor('"+val+"');";
+      listItem.className = "dropdown-item";
+      archiveListElem.appendChild(listItem);
+    });
+  });
+}
+
+function showTalesByGenre(genre){
+  $("#tale-today").hide();
+  $("#my-content").show();
+  var registerData = {
+    genre:genre,
+    author:"All",
+    rating:"All"
+  };
+  sendData(registerData);
+}
+
+function showTalesByAuthor(author){
+  $("#tale-today").hide();
+  $("#my-content").show();
+  var registerData = {
+    genre:"All",
+    author:author,
+    rating:"All"
+  };
+  sendData(registerData);
+}
+
+
+function sendData(registerData){
+   $.ajax({
+    url: apiSearchURL,
+    type: "POST",
+    data: JSON.stringify(registerData),
+    dataType: "json",
+    contentType: "application/json",
+    success: function(data) {
+      //window.open('verify.html', '_self', 'resizable=yes')
+      console.log(data);
+      $("#my-content").html("");
+      if(data.length == 0){
+        $("#my-content").append(  '<div class="card content" style="width: 18rem;margin-top:40px">' +
+            '<div class="card-body">' +
+              '<h1>No results</h1>'   +
+          '</div></div>');
+      }
+      for(let i=0;i<data.length ; i++){
+        if(data !== null){
+         $("#my-content").append(  '<div class="card content" style="width: 18rem;margin-top:40px">' +
+             '<div class="card-body">' +
+
+             "<h2>Top " +(i+1)+ " </br> " + data[i].title + "</h2>" +
+             "<h7>Author: " + data[i].author.name + "</h7></br>" +
+             "<h7>Genre: " + data[i].genre.type + "</h7>" +
+             "<hr><p class='card-text'>" +  data[i].description.substring(0, 40) + '...' + '</p><hr>' +
+             '<h5>Date added: '+ data[i].dateAdded +  '</h5>' +
+             '<p>Rating: '+ data[i].rating +  '</p>' +
+             '<p>Number of Ratings: '+ data[i].nrRating +  '</p>' +
+             '<p id="rating-date-' + data[i].dateAdded + '"></p>' +
+             '<a href="./index.html?date=' +data[i].dateAdded +  '"id="tale-date-' + data[i].dateAdded +'" class="li-modal btn btn-info">See Full description</a>' +
+           '</div></div>');
+          //append rating when available
+
+       }
+     }
+    },
+    error: function(err) {
+        try{
+        addErrorMessage(err.responseJSON.message);
+      }
+      catch(e){
+        addErrorMessage("Cannot send your request! Please try again!");
+      }
+      console.log(err);
+    }
+  });
+}
+
 function appendFavorite(date){
   $.get(allFavorites, function(data, status){
     if(data.includes(date)){
@@ -167,6 +272,7 @@ function appendFavorite(date){
 
  function stopText(){
    read = false;
+   firstTime = true;
    $("#speech").attr("src","./img/Microphone.png");
    $("#play").attr("src","./img/play.png");
    if ('speechSynthesis' in window) {
@@ -181,8 +287,11 @@ function readText(){
     $("#play").attr("src","./img/pause.jfif");
     if ('speechSynthesis' in window) {
           var msg = new SpeechSynthesisUtterance($("#tale-description").html());
-          window.speechSynthesis.resume();
-          window.speechSynthesis.speak(msg);
+          if(firstTime){
+            window.speechSynthesis.speak(msg);
+            firstTime = false;
+          }
+          else  window.speechSynthesis.resume();
     }
   }
   else{
@@ -302,6 +411,8 @@ async function main(){
       //index.html
       getTaleByURL(window.location);
       appendItemsToArchiveList();
+      appendItemsToGenreList();
+      appendItemsToAuthorList();
       hideLoadingScreen();
       //check if user is admin
       if(isAdmin(user)){

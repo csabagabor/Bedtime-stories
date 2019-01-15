@@ -49,6 +49,20 @@
           <div id="archive-list" class="dropdown-menu">
           </div>
         </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+          Genre
+        </a>
+          <div id="genre-list" class="dropdown-menu">
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+          Author
+        </a>
+          <div id="author-list" class="dropdown-menu">
+          </div>
+        </li>
       </ul>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown">
@@ -64,13 +78,17 @@
       </ul>
     </nav>
 
-    <div class="card content" style="width: 18rem;margin-top:80px">
+    <div id ="my-content" style="margin-top:80px">
+
+    </div>
+
+    <div id="tale-today" class="card content" style="width: 18rem;margin-top:80px">
       <div class="card-body">
         <div id="serverMessage"></div>
         <h1 id="story-big-title">Today's Bedtime Story</h1>
         <h2 id="tale-title" class="translate"></h2>
-        <h5 class="text-left" id="tale-author">Author:</h2>
-        <h6 class="text-left" id="tale-genre">Genre:</h2>
+        <h5 class="text-left translate" id="tale-author">Author:</h2>
+        <h6 class="text-left translate" id="tale-genre">Genre:</h2>
           <input id="speech"  width="40px" height="40px" type="image" src="./img/Microphone.png" />
 
           <input id="play" style="margin-left: 20px"  width="40px" height="40px" onclick = "readText()" type="image" src="./img/play.png" />
