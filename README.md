@@ -1,4 +1,4 @@
-# Bedtime stories website with Spring Boot REST API + PostgreSQL hosted on Heroku + JWT token based authentication
+# Bedtime stories website with Spring Boot REST API + PostgreSQL hosted on Heroku + JWT based authentication
 ### About
 - Full example can be seen [here](https://bedtime-stories.herokuapp.com/index.html). Note that because the backend runs on a free dyno on Heroku, it may take some time to load
 - This is a small application which serves a new bedtime story for kids every day.
@@ -10,6 +10,7 @@
 ### Features
 - JWT token based authentication(2 roles - admin and user)
 - passwords are hashed with Bcrypt 
+- uses Hibernate ORM Framework
 - `Spring Boot` backend with REST API hosted on HEROKU
 - frontend in `JS` + `jQuery` + `Bootstrap 4`
 - `PostgreSQL` database
