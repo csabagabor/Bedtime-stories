@@ -253,7 +253,7 @@ VALUES ('The Unicorn Named Wild One', 2,93,'2018-12-27', 5.0, 3, 'This story beg
 ### How to add new stories/tales
 There are 2 options:  
 1. create a new story with an admin/user then the admin accepts the story 
-2. run an SQL query:
+2. run this SQL query:
 ```sql
 INSERT INTO tale (title, description, genre_id, author_id, date_added, rating, nr_rating)
 VALUES ( 'Title',E'Something', 1,1,'2018-12-20', 4.0, 1);
